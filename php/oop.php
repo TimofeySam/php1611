@@ -1,5 +1,4 @@
 <?php
-/* Здоровье (hp) персонажа не может превышать 100ед.*/
 class Person{
     private $name;
     private $lastname;
@@ -12,15 +11,8 @@ class Person{
         $this->name = $name;
         $this->lastname = $lastname;
         $this->age = $age;
-        $this->hp = 100;
         $this->mother = $mother;
         $this->father = $father;
-    }
-    public function sayHi(){
-        return "Привет, меня зовут ".$this->name." у меня ".$this->hp." здоровья";
-    }
-    public function getHp(){
-        return $this->hp;
     }
     public function getName(){
         return $this->name;
@@ -38,34 +30,35 @@ class Person{
     public function getFather(){
         return $this->father;
     }
-
-    public function setHp($hp){
-        if($this->hp+$hp > 100) $this->hp = 100;
-        else $this->hp = $this->hp + $hp;
-    }
     public function info(){
-        $result = "Имя: ".$this->name."<br>";
-        if($this->getMother() != null){
-            $result .= "Имя матери: ".$this->getMother()->getName()."<br>";
+        $result = "<i>". "Имя: ".$this->name."</i><br>";
+        if($this->getMother() != null) {
+            $result .= "<strong>"."Имя матери: ".$this->getMother()->getName()."<br>";
             if($this->getMother()->getFather != null){
                 $result .= "Имя дедушки по маминой линии: ".$this->getMother()->getFather()->getName();
             }
+            if($this->getMother()->getMother() != null){
+                $result .= "Имя бабушки по маминой линии: ".$this->getMother()->getMather()->getName();
+            }
         }
         if($this->getFather() != null){
-            $result .= "Имя отца: ".$this->getFather()->getName()."<br>";
+            $result .= "<strong>"."Имя отца: ".$this->getFather()->getName()."<br>";
+            if($this->getFather()->getFather != null){
+                $result .= "Имя дедушки по папиной линии: ".$this->getFather()->getFather()->getName();
+            }
+            if($this->getFather()->getMother() != null){
+                $result .= "Имя бабушки по папиной линии: ".$this->getFather()->getMather()->getName();
+            }
         }
 
         return $result;
     }
 }
-$medKit = 50;
-$person4 = new Person("Igor", "Petrov", 70);
-$person3 = new Person("Ivan", "Ivanov", 35);
-$person2 = new Person("Olga", "Ivanov", 40, null, $person4);
-$person1 = new Person("Alex", "Ivanov", 10, $person2, $person3);
-echo $person2->info();
-/*echo $person1->getHp()."<br>"; // 100
-$person1->setHp(-30);
-echo $person1->getHp()."<br>"; // 70
-$person1->setHp($medKit);
-echo $person1->getHp()."<br>"; // 100*/
+$person7 = new Person("Sergey", "Popov", 72); /*Дедушка от папы*/
+$person6 = new Person("Vera", "Popova", 73); /*Бабушка от папы*/
+$person5 = new Person("Nadya", "Petrova", 68); /*Бабушка от мамы*/
+$person4 = new Person("Igor", "Petrov", 70); /*Дедушка от мамы*/
+$person3 = new Person("Ivan", "Ivanov", 35, $person7, $person6); /*Папы*/
+$person2 = new Person("Olga", "Ivanova", 40, $person5, $person4); /*Мама*/
+$person1 = new Person("Alex", "Ivanov", 10, $person3, $person2); /*Сыи*/
+echo $person1->info();
